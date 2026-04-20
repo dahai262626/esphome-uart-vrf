@@ -1,4 +1,4 @@
-* ESPHome Uart VRF
+* ESPHome(2026.4.1) Uart VRF
 中央空调 VRF 网关串口通信 ESPHome 固件，支持德姆瑞 DEMRY、平头熊 PTXZN、中弘系列。
 
 * 功能
