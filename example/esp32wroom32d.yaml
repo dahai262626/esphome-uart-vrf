@@ -66,6 +66,19 @@ light:
 uart_vrf:
 
 climate:
+  - platform: uart_vrf
+    id: vrf_climate_1_1
+    name: "vrf_climate_1_1"
+  - platform: uart_vrf
+    id: vrf_climate_1_2
+    name: "vrf_climate_1_2"
+  - platform: uart_vrf
+    id: vrf_climate_1_3
+    name: "vrf_climate_1_3"
+  - platform: uart_vrf
+    id: vrf_climate_1_4
+    name: "vrf_climate_1_4"
+
 
 web_server:
   port: 80
