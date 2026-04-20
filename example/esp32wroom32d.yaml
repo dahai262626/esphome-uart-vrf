@@ -16,7 +16,7 @@ esp32:
 external_components:
   - source:
       type: git
-      url: https://github.com/idreamshen/esphome-uart-vrf
+      url: https://github.com/dahai262626/esphome-uart-vrf
 
 # Enable logging
 logger:
