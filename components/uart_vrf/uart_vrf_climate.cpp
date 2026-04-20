@@ -1,19 +1,19 @@
 #include "esphome/core/application.h"
+#include "esphome/core/log.h"
 #include "uart_vrf_climate.h"
 
 namespace esphome {
 namespace uart_vrf {
 
-static const char *const TAG = "uart_vrf.climate"; 
-
-void UartVrfClimate::setup() {
-   // ESP_LOGD(TAG, "UartVrfClimate::setup");
-}
-
-void UartVrfClimate::dump_config() {
-}
+static const char *const TAG = "uart_vrf.climate";
 
 void UartVrfClimate::control(const climate::ClimateCall &call) {
+    // Not yet bound to a discovered VRF unit – silently drop the control call.
+    if (this->core_climate_ == nullptr) {
+        ESP_LOGW(TAG, "Climate not yet bound to a VRF unit, ignoring control call");
+        return;
+    }
+
     if (call.get_mode().has_value()) {
         this->mode = *call.get_mode();
 
@@ -77,12 +77,12 @@ void UartVrfClimate::control(const climate::ClimateCall &call) {
     }
 
     this->publish_state();
-    return;
 }
 
 climate::ClimateTraits UartVrfClimate::traits() {
     auto traits = climate::ClimateTraits();
-    traits.set_supports_current_temperature(true);
+    // ESPHome 2025.11+: use add_feature_flags() with CLIMATE_SUPPORTS_* constants.
+    traits.add_feature_flags(climate::CLIMATE_SUPPORTS_CURRENT_TEMPERATURE);
     traits.set_visual_target_temperature_step(1);
     traits.set_visual_temperature_step(1);
     traits.set_visual_min_temperature(16);
@@ -91,17 +91,17 @@ climate::ClimateTraits UartVrfClimate::traits() {
         climate::CLIMATE_FAN_AUTO,
         climate::CLIMATE_FAN_LOW,
         climate::CLIMATE_FAN_MEDIUM,
-        climate::CLIMATE_FAN_HIGH
-        });
+        climate::CLIMATE_FAN_HIGH,
+    });
     traits.set_supported_modes({
         climate::CLIMATE_MODE_OFF,
         climate::CLIMATE_MODE_HEAT,
         climate::CLIMATE_MODE_COOL,
         climate::CLIMATE_MODE_FAN_ONLY,
-        climate::CLIMATE_MODE_DRY
-        });
+        climate::CLIMATE_MODE_DRY,
+    });
     return traits;
-};
+}
 
-}
-}
+} // namespace uart_vrf
+} // namespace esphome
